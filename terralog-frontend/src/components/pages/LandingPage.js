@@ -124,7 +124,8 @@ const LandingPage = () => {
   // --- Hitung Statistik ---
   // 1. Total Sampah Terkumpul
   const totalSampah = useMemo(() => {
-    return wasteData.reduce((sum, item) => sum + (parseFloat(item.berat) || 0), 0);
+    const safeWasteData = Array.isArray(wasteData) ? wasteData : [];
+    return safeWasteData.reduce((sum, item) => sum + (parseFloat(item.berat) || 0), 0);
   }, [wasteData]);
   
   // 2. Total Transaksi
@@ -152,8 +153,9 @@ const LandingPage = () => {
   };
   
   const totalSampahMingguIni = useMemo(() => {
+    const safeWasteData = Array.isArray(wasteData) ? wasteData : [];
     const startOfWeek = getStartOfWeek();
-    return wasteData.filter(item => {
+    return safeWasteData.filter(item => {
       const itemDate = new Date(item.tanggalInput || item.tanggal);
       return itemDate >= startOfWeek;
     }).reduce((sum, item) => sum + (parseFloat(item.berat) || 0), 0);
@@ -192,9 +194,10 @@ const LandingPage = () => {
   // --- Hitung Trend ---
   // 1. Trend Total Sampah (Minggu Ini vs Minggu Lalu)
   const totalSampahMingguLalu = useMemo(() => {
+    const safeWasteData = Array.isArray(wasteData) ? wasteData : [];
     const startLastWeek = getStartOfLastWeek();
     const endLastWeek = getEndOfLastWeek();
-    return wasteData.filter(item => {
+    return safeWasteData.filter(item => {
       const itemDate = new Date(item.tanggalInput || item.tanggal);
       return itemDate >= startLastWeek && itemDate <= endLastWeek;
     }).reduce((sum, item) => sum + (parseFloat(item.berat) || 0), 0);

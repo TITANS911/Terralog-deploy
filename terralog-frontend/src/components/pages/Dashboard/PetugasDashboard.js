@@ -85,13 +85,15 @@ const PetugasDashboard = () => {
         setJadwalList(jadwalResponse.data || []);
         
         // Filter transaksi hanya yang milik petugas ini
-        const transaksiPetugas = allTransaksi.filter(item => item.petugas?.userId === currentPetugasId);
+        const safeAllTransaksi = Array.isArray(allTransaksi) ? allTransaksi : [];
+        const transaksiPetugas = safeAllTransaksi.filter(item => item.petugas?.userId === currentPetugasId);
         
-        setTransactions(allTransaksi);
+        setTransactions(safeAllTransaksi);
         setFilteredTransactions(transaksiPetugas);
         
         // Hitung total warga
-        const warga = allUsers.filter(user => user.role === "WARGA");
+        const safeAllUsers = Array.isArray(allUsers) ? allUsers : [];
+        const warga = safeAllUsers.filter(user => user.role === "WARGA");
         setTotalWarga(warga.length);
         
         // Hitung total sampah dari transaksi petugas
@@ -113,12 +115,13 @@ const PetugasDashboard = () => {
 
   // Memproses data chart
   useEffect(() => {
-    if (filteredTransactions.length === 0) return;
+    const safeFilteredTransactions = Array.isArray(filteredTransactions) ? filteredTransactions : [];
+    if (safeFilteredTransactions.length === 0) return;
 
     // Filter berdasarkan kategori
     const filtered = jenisSampah === 'Semua' 
-      ? filteredTransactions 
-      : filteredTransactions.filter(t => t.kategoriSampah === jenisSampah);
+      ? safeFilteredTransactions 
+      : safeFilteredTransactions.filter(t => t.kategoriSampah === jenisSampah);
 
     // Agregasi per bulan
     const monthlyMap = { 
@@ -141,11 +144,12 @@ const PetugasDashboard = () => {
 
   // Data untuk chart donut
   const wasteStats = useMemo(() => {
-    if (filteredTransactions.length === 0) return [];
+    const safeFilteredTransactions = Array.isArray(filteredTransactions) ? filteredTransactions : [];
+    if (safeFilteredTransactions.length === 0) return [];
     
-    const totalKeseluruhan = filteredTransactions.reduce((sum, item) => sum + (parseFloat(item.totalBerat) || 0), 0);
+    const totalKeseluruhan = safeFilteredTransactions.reduce((sum, item) => sum + (parseFloat(item.totalBerat) || 0), 0);
     
-    const map = filteredTransactions.reduce((acc, curr) => {
+    const map = safeFilteredTransactions.reduce((acc, curr) => {
       const name = curr.kategoriSampah || 'Lainnya';
       acc[name] = (acc[name] || 0) + (parseFloat(curr.totalBerat) || 0);
       return acc;

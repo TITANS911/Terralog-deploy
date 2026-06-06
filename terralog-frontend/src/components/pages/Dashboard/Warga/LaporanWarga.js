@@ -60,18 +60,20 @@ const LaporanWarga = () => {
 
   // Filter hanya data yang statusnya bukan pending
   const filteredWasteData = useMemo(() => {
-    return allWaste.filter(w => w.status?.toLowerCase() !== 'pending');
+    const safeAllWaste = Array.isArray(allWaste) ? allWaste : [];
+    return safeAllWaste.filter(w => w.status?.toLowerCase() !== 'pending');
   }, [allWaste]);
 
   // useEffect untuk memproses data waste dan chart
   useEffect(() => {
     const processChartData = () => {
-      if (filteredWasteData.length === 0) return;
+      const safeFilteredData = Array.isArray(filteredWasteData) ? filteredWasteData : [];
+      if (safeFilteredData.length === 0) return;
 
       // 1. FILTER KATEGORI: (Jika user memilih kategori tertentu)
       const filtered = jenisSampah === 'Semua' 
-        ? filteredWasteData 
-        : filteredWasteData.filter(t => t.kategori?.namaKategori === jenisSampah);
+        ? safeFilteredData 
+        : safeFilteredData.filter(t => t.kategori?.namaKategori === jenisSampah);
 
       // 2. AGGREGASI: Jumlahkan berat berdasarkan bulan
       const monthlyMap = { 
@@ -133,11 +135,12 @@ const LaporanWarga = () => {
 
   // Hitung statistik untuk Chart Donut
   const wasteStats = useMemo(() => {
-    if (filteredWasteData.length === 0) return [];
+    const safeFilteredData = Array.isArray(filteredWasteData) ? filteredWasteData : [];
+    if (safeFilteredData.length === 0) return [];
     
-    const totalKeseluruhan = filteredWasteData.reduce((sum, item) => sum + (parseFloat(item.berat) || 0), 0);
+    const totalKeseluruhan = safeFilteredData.reduce((sum, item) => sum + (parseFloat(item.berat) || 0), 0);
     
-    const map = filteredWasteData.reduce((acc, curr) => {
+    const map = safeFilteredData.reduce((acc, curr) => {
       const name = curr.kategori?.namaKategori || 'Lainnya';
       acc[name] = (acc[name] || 0) + (parseFloat(curr.berat) || 0);
       return acc;
@@ -151,7 +154,8 @@ const LaporanWarga = () => {
   }, [filteredWasteData]);
 
   const totalSampahFull = useMemo(() => {
-    return filteredWasteData.reduce((sum, item) => sum + (parseFloat(item.berat) || 0), 0);
+    const safeFilteredData = Array.isArray(filteredWasteData) ? filteredWasteData : [];
+    return safeFilteredData.reduce((sum, item) => sum + (parseFloat(item.berat) || 0), 0);
   }, [filteredWasteData]);
 
   const maxValue = useMemo(() => {

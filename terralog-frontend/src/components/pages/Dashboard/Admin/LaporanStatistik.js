@@ -54,13 +54,14 @@ const LaporanStatistik = () => {
       // Panggil endpoint yang benar: /api/waste
       const response = await axios.get(`${API_BASE_URL}/api/waste`);
       const allWaste = response.data || [];
+      const safeAllWaste = Array.isArray(allWaste) ? allWaste : [];
       // const allWaste = mockWasteData;
 
       const kategoriRes = await axios.get(`${API_BASE_URL}/api/kategori`);
       setKategoriList(kategoriRes.data || []);
 
       // 1. FILTER: Ambil hanya yang statusnya "SELESAI"
-      const dataSelesai = allWaste.filter(item => item.status === "SELESAI");
+      const dataSelesai = safeAllWaste.filter(item => item.status === "SELESAI");
 
       // 2. FILTER KATEGORI: (Jika user memilih kategori tertentu)
       const filtered = jenisSampah === 'Semua' 
@@ -79,7 +80,7 @@ const LaporanStatistik = () => {
         const m = monthNames[date.getMonth()];
         
         if (monthlyMap.hasOwnProperty(m)) {
-          monthlyMap[m] += (t.berat || 0); // Gunakan field 'berat' sesuai JSON
+          monthlyMap[m] += (parseFloat(t.berat) || 0); // Gunakan field 'berat' sesuai JSON
         }
       });
 
@@ -88,7 +89,7 @@ const LaporanStatistik = () => {
       
       setStats(prev => ({
         ...prev, // PENTING: Pertahankan nilai wargaAktif yang sudah ada
-        totalSampah: filtered.reduce((sum, item) => sum + (item.berat || 0), 0),
+        totalSampah: filtered.reduce((sum, item) => sum + (parseFloat(item.berat) || 0), 0),
         totalTransaksi: filtered.length
       }));
 
@@ -119,13 +120,15 @@ useEffect(() => {
         ]);
         console.log("Data Users dari API:", usersRes.data);
         // Hitung total berat sampah (asumsi fieldnya adalah 'berat')
-        const totalSampah = wasteRes.data.reduce((sum, item) => sum + (item.berat || 0), 0);
+        const safeWasteData = Array.isArray(wasteRes.data) ? wasteRes.data : [];
+        const totalSampah = safeWasteData.reduce((sum, item) => sum + (parseFloat(item.berat) || 0), 0);
         
         // Hitung total transaksi
-        const totalTransaksi = transaksiRes.data.length;
+        const safeTransaksiData = Array.isArray(transaksiRes.data) ? transaksiRes.data : [];
+        const totalTransaksi = safeTransaksiData.length;
         
         // Hitung warga aktif (filter berdasarkan role)
-        const allUsers = usersRes.data || [];
+        const allUsers = Array.isArray(usersRes.data) ? usersRes.data : [];
         const wargaAktif = allUsers.filter(u => 
           u.role && u.role.toString().toUpperCase() === "WARGA"
         ).length;
@@ -226,7 +229,8 @@ useEffect(() => {
   }, []);
 // 1. Logika untuk menghitung statistik berdasarkan kategori dari DATA FULL (allWaste)
 const wasteStats = useMemo(() => {
-  const dataSelesai = allWaste.filter(item => item.status === "SELESAI");
+  const safeAllWaste = Array.isArray(allWaste) ? allWaste : [];
+  const dataSelesai = safeAllWaste.filter(item => item.status === "SELESAI");
   const totalKeseluruhan = dataSelesai.reduce((sum, item) => sum + (parseFloat(item.berat) || 0), 0);
 
   const map = dataSelesai.reduce((acc, curr) => {
@@ -239,14 +243,13 @@ const wasteStats = useMemo(() => {
     label: label,
     value: map[label],
     // Hitung persentase di sini
-    percentage: totalKeseluruhan > 0 
-      ? ((map[label] / totalKeseluruhan) * 100).toFixed(1) 
-      : 0
+    percentage: totalKeseluruhan > 0 ? ((map[label] / totalKeseluruhan) * 100).toFixed(1) : 0
   }));
 }, [allWaste]);
 // 1. Hitung total sampah dari DATA FULL (allWaste), bukan dari data terfilter
 const totalSampahFull = useMemo(() => {
-  return allWaste
+  const safeAllWaste = Array.isArray(allWaste) ? allWaste : [];
+  return safeAllWaste
     .filter(item => item.status === "SELESAI")
     .reduce((sum, item) => sum + (parseFloat(item.berat) || 0), 0);
 }, [allWaste]);

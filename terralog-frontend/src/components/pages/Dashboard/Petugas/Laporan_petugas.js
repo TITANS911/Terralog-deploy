@@ -88,12 +88,13 @@ const currentPetugasId = parseInt(localStorage.getItem('userId'), 10);
 // useEffect untuk memproses data transaksi dan chart
 useEffect(() => {
   const processChartData = () => {
-    if (allWaste.length === 0) return;
+    const safeAllWaste = Array.isArray(allWaste) ? allWaste : [];
+    if (safeAllWaste.length === 0) return;
 
     // 1. FILTER KATEGORI: (Jika user memilih kategori tertentu)
     const filtered = jenisSampah === 'Semua' 
-      ? allWaste 
-      : allWaste.filter(t => t.kategoriSampah === jenisSampah);
+      ? safeAllWaste 
+      : safeAllWaste.filter(t => t.kategoriSampah === jenisSampah);
 
     // 2. AGGREGASI: Jumlahkan berat berdasarkan bulan
     const monthlyMap = { 
@@ -178,11 +179,12 @@ useEffect(() => {
 
 // Hitung statistik untuk Chart Donut
 const wasteStats = useMemo(() => {
-  if (allWaste.length === 0) return [];
+  const safeAllWaste = Array.isArray(allWaste) ? allWaste : [];
+  if (safeAllWaste.length === 0) return [];
   
-  const totalKeseluruhan = allWaste.reduce((sum, item) => sum + (parseFloat(item.totalBerat) || 0), 0);
+  const totalKeseluruhan = safeAllWaste.reduce((sum, item) => sum + (parseFloat(item.totalBerat) || 0), 0);
   
-  const map = allWaste.reduce((acc, curr) => {
+  const map = safeAllWaste.reduce((acc, curr) => {
     const name = curr.kategoriSampah || 'Lainnya';
     // PERBAIKAN: Gunakan 'curr.totalBerat', BUKAN 'item.totalBerat'
     acc[name] = (acc[name] || 0) + (parseFloat(curr.totalBerat) || 0);
@@ -197,7 +199,8 @@ const wasteStats = useMemo(() => {
 }, [allWaste]);
 
 const totalSampahFull = useMemo(() => {
-  return allWaste.reduce((sum, item) => sum + (parseFloat(item.totalBerat) || 0), 0);
+  const safeAllWaste = Array.isArray(allWaste) ? allWaste : [];
+  return safeAllWaste.reduce((sum, item) => sum + (parseFloat(item.totalBerat) || 0), 0);
 }, [allWaste]);
 
   const maxValue = useMemo(() => {

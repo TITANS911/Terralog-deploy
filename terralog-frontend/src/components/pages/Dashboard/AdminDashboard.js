@@ -88,15 +88,18 @@ useEffect(() => {
       try {
         const response = await fetch(`${API_BASE_URL}/api/users`);
         const allUsers = await response.json();
+        const safeAllUsers = Array.isArray(allUsers) ? allUsers : [];
 
         const transaksiResponse = await fetch(`${API_BASE_URL}/api/transaksi`);
         const allTransaksi = await transaksiResponse.json();
+        const safeAllTransaksi = Array.isArray(allTransaksi) ? allTransaksi : [];
 
         const wasteResponse = await fetch(`${API_BASE_URL}/api/waste`);
         const allWaste = await wasteResponse.json();
+        const safeAllWaste = Array.isArray(allWaste) ? allWaste : [];
 
         // 1. Filter hanya status "SELESAI"
-        const wasteSelesai = allWaste.filter(item => item.status === "SELESAI");
+        const wasteSelesai = safeAllWaste.filter(item => item.status === "SELESAI");
               
         // 2. Penjumlahan Dinamis dengan Ignore List yang Lengkap
         const totalBerat = wasteSelesai.reduce((total, item) => {
@@ -129,16 +132,15 @@ useEffect(() => {
           
           return total + beratPerBaris;
         }, 0);
-  
-      
+        
         // Filter user yang role-nya "WARGA"
-        const warga = allUsers.filter(user => user.role === "WARGA");
-        const petugas = allUsers.filter(user => user.role === "PETUGAS");
+        const warga = safeAllUsers.filter(user => user.role === "WARGA");
+        const petugas = safeAllUsers.filter(user => user.role === "PETUGAS");
 
         // Update state
         setTotalWarga(warga.length);
         setTotalPetugas(petugas.length);
-        setTotalTransaksi(allTransaksi.length);
+        setTotalTransaksi(safeAllTransaksi.length);
         setTotalSampah(totalBerat);
       } catch (error) {
         console.error("Gagal ambil data:", error);
@@ -261,7 +263,8 @@ const filteredData = useMemo(() => {
   }, []);
 // 1. Logika untuk menghitung statistik berdasarkan kategori dari DATA FULL (allWaste)
 const wasteStats = useMemo(() => {
-  const dataSelesai = allWaste.filter(item => item.status === "SELESAI");
+  const safeAllWaste = Array.isArray(allWaste) ? allWaste : [];
+  const dataSelesai = safeAllWaste.filter(item => item.status === "SELESAI");
   const totalKeseluruhan = dataSelesai.reduce((sum, item) => sum + (parseFloat(item.berat) || 0), 0);
 
   const map = dataSelesai.reduce((acc, curr) => {
@@ -281,7 +284,8 @@ const wasteStats = useMemo(() => {
 }, [allWaste]);
 // 1. Hitung total sampah dari DATA FULL (allWaste), bukan dari data terfilter
 const totalSampahFull = useMemo(() => {
-  return allWaste
+  const safeAllWaste = Array.isArray(allWaste) ? allWaste : [];
+  return safeAllWaste
     .filter(item => item.status === "SELESAI")
     .reduce((sum, item) => sum + (parseFloat(item.berat) || 0), 0);
 }, [allWaste]);

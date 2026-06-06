@@ -97,11 +97,13 @@ const WargaDashboard = () => {
 
   // Filter hanya data yang statusnya bukan pending
   const filteredWasteData = useMemo(() => {
-    return wasteData.filter(w => w.status?.toLowerCase() !== 'pending');
+    const safeWasteData = Array.isArray(wasteData) ? wasteData : [];
+    return safeWasteData.filter(w => w.status?.toLowerCase() !== 'pending');
   }, [wasteData]);
 
   const totalSampah = useMemo(() => {
-    return filteredWasteData.reduce((sum, w) => sum + (parseFloat(w.berat) || 0), 0);
+    const safeFilteredData = Array.isArray(filteredWasteData) ? filteredWasteData : [];
+    return safeFilteredData.reduce((sum, w) => sum + (parseFloat(w.berat) || 0), 0);
   }, [filteredWasteData]);
 
   const todayDisplay = now.toLocaleDateString('id-ID', {
@@ -128,7 +130,8 @@ const WargaDashboard = () => {
       monthlyData[month] = 0;
     });
 
-    filteredWasteData.forEach(w => {
+    const safeFilteredData = Array.isArray(filteredWasteData) ? filteredWasteData : [];
+    safeFilteredData.forEach(w => {
       const date = new Date(w.tanggalInput || w.tanggal);
       const month = monthNames[date.getMonth()];
       if (monthlyData[month] !== undefined) {
