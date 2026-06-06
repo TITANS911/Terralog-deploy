@@ -107,10 +107,10 @@ const LandingPage = () => {
           axios.get(`${API_BASE_URL}/api/kategori`)
         ]);
         
-        setWasteData(wasteRes.data || []);
-        setTransaksiData(transaksiRes.data || []);
-        setUsersData(usersRes.data || []);
-        setKategoriData(kategoriRes.data || []);
+        setWasteData(Array.isArray(wasteRes.data) ? wasteRes.data : []);
+        setTransaksiData(Array.isArray(transaksiRes.data) ? transaksiRes.data : []);
+        setUsersData(Array.isArray(usersRes.data) ? usersRes.data : []);
+        setKategoriData(Array.isArray(kategoriRes.data) ? kategoriRes.data : []);
       } catch (error) {
         console.error('Error fetching data:', error);
       } finally {

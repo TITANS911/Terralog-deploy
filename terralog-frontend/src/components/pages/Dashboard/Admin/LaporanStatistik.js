@@ -219,7 +219,7 @@ useEffect(() => {
           axios.get(`${API_BASE_URL}/api/users`)
         ]);
         
-        setAllWaste(wasteRes.data || []);
+        setAllWaste(Array.isArray(wasteRes.data) ? wasteRes.data : []);
         // ... setStats logic here ...
       } catch (error) {
         console.error("Gagal ambil data Full:", error);

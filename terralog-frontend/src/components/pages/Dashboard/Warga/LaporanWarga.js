@@ -124,7 +124,7 @@ const LaporanWarga = () => {
     const fetchKategori = async () => {
       try {
         const res = await axios.get(`${API_BASE_URL}/api/kategori`);
-        setKategoriList(res.data || []);
+        setKategoriList(Array.isArray(res.data) ? res.data : []);
       } catch (error) {
         console.error("Gagal ambil kategori:", error);
       }

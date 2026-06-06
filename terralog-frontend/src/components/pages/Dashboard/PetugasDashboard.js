@@ -70,19 +70,19 @@ const PetugasDashboard = () => {
         
         // Fetch users
         const usersResponse = await axios.get(`${API_BASE_URL}/api/users`);
-        const allUsers = usersResponse.data;
+        const allUsers = Array.isArray(usersResponse.data) ? usersResponse.data : [];
         
         // Fetch transactions
         const transaksiResponse = await axios.get(`${API_BASE_URL}/api/transaksi`);
-        const allTransaksi = transaksiResponse.data;
+        const allTransaksi = Array.isArray(transaksiResponse.data) ? transaksiResponse.data : [];
         
         // Fetch kategori
         const kategoriResponse = await axios.get(`${API_BASE_URL}/api/kategori`);
-        setKategoriList(kategoriResponse.data || []);
+        setKategoriList(Array.isArray(kategoriResponse.data) ? kategoriResponse.data : []);
         
         // Fetch jadwal
         const jadwalResponse = await axios.get(`${API_BASE_URL}/api/jadwal`);
-        setJadwalList(jadwalResponse.data || []);
+        setJadwalList(Array.isArray(jadwalResponse.data) ? jadwalResponse.data : []);
         
         // Filter transaksi hanya yang milik petugas ini
         const safeAllTransaksi = Array.isArray(allTransaksi) ? allTransaksi : [];
@@ -203,7 +203,8 @@ const PetugasDashboard = () => {
 
   // Jadwal hari ini
   const jadwalHariIni = useMemo(() => {
-    return jadwalList.filter((item) => {
+    const safeJadwalList = Array.isArray(jadwalList) ? jadwalList : [];
+    return safeJadwalList.filter((item) => {
       if (!item.tanggalTugas) return false;
       const tanggalAPI = item.tanggalTugas.substring(0, 10);
       return tanggalAPI === today;
@@ -212,7 +213,8 @@ const PetugasDashboard = () => {
 
   // Transaksi hari ini
   const todayTransactions = useMemo(() => {
-    return filteredTransactions.filter(t => t.tanggal && t.tanggal.startsWith(today));
+    const safeFilteredTransactions = Array.isArray(filteredTransactions) ? filteredTransactions : [];
+    return safeFilteredTransactions.filter(t => t.tanggal && t.tanggal.startsWith(today));
   }, [filteredTransactions, today]);
 
   const statsData = [

@@ -156,9 +156,10 @@ useEffect(() => {
       const response = await axios.get(`${API_BASE_URL}/api/jadwal`);
       
       const today = new Date().toLocaleDateString('en-CA');
+      const safeJadwalData = Array.isArray(response.data) ? response.data : [];
       
       // Filter di sini agar state yang disimpan sudah bersih
-      const filtered = response.data.filter(item => {
+      const filtered = safeJadwalData.filter(item => {
         // Jika API kirim tanggal dalam format array [YYYY, M, D]
         // Anda perlu ubah dulu jadi string:
         const tglItem = Array.isArray(item.tanggalTugas) 
@@ -181,8 +182,9 @@ useEffect(() => {
 
 const filteredData = useMemo(() => {
   const today = new Date().toLocaleDateString('en-CA'); // "2026-05-27"
+  const safePickupData = Array.isArray(pickupData) ? pickupData : [];
   
-  return pickupData.filter(item => {
+  return safePickupData.filter(item => {
     let tglItem = item.tanggalTugas;
 
     // Jika data adalah array [2026, 5, 27]
@@ -253,7 +255,7 @@ const filteredData = useMemo(() => {
           axios.get(`${API_BASE_URL}/api/users`)
         ]);
         
-        setAllWaste(wasteRes.data || []);
+        setAllWaste(Array.isArray(wasteRes.data) ? wasteRes.data : []);
         // ... setStats logic here ...
       } catch (error) {
         console.error("Gagal ambil data Full:", error);

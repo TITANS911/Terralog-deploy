@@ -132,7 +132,7 @@ useEffect(() => {
     try {
       setLoading(true);
       const res = await axios.get(`${API_BASE_URL}/api/transaksi`);
-      const allTransaksi = res.data || [];
+      const allTransaksi = Array.isArray(res.data) ? res.data : [];
 
       // Filter berdasarkan ID Petugas
       const dataTerfilter = allTransaksi.filter(item => 
@@ -160,9 +160,10 @@ useEffect(() => {
         axios.get(`${API_BASE_URL}/api/users`)
       ]);
 
-      setKategoriList(kategoriRes.data || []);
+      setKategoriList(Array.isArray(kategoriRes.data) ? kategoriRes.data : []);
       
-      const warga = (usersRes.data || []).filter(u => 
+      const safeUsersData = Array.isArray(usersRes.data) ? usersRes.data : [];
+      const warga = safeUsersData.filter(u => 
         u.role?.toString().toUpperCase() === "WARGA"
       );
       

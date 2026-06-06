@@ -85,7 +85,7 @@ const WargaDashboard = () => {
       if (!userId) return;
       try {
         const response = await axios.get(`${API_BASE_URL}/api/waste/user/${userId}`);
-        setWasteData(response.data || []);
+        setWasteData(Array.isArray(response.data) ? response.data : []);
       } catch (error) {
         console.error('Gagal mengambil data:', error);
       } finally {
