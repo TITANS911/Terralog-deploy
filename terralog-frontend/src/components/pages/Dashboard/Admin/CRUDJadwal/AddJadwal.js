@@ -27,7 +27,7 @@ const AddJadwal = () => {
     // --- 1. LOGIKA FETCH DATA UNTUK EDIT ---
     useEffect(() => {
         if (isEdit) {
-            axios.get(`http://localhost:8080/api/jadwal/${id}`)
+            axios.get(`${API_BASE_URL}/api/jadwal/${id}`)
                 .then(res => {
                     // Cek dualisme properti jika dari backend masih ada yang bertipe snake_case
                     setFormData({
@@ -47,7 +47,7 @@ const AddJadwal = () => {
 
     // --- 2. LOGIKA FETCH DATA PETUGAS & WASTE ---
     useEffect(() => {
-        axios.get(`${API_BASE_URL}/api/users')
+        axios.get(`${API_BASE_URL}/api/users`)
             .then(res => {
                 setListPetugas(res.data);
             })
@@ -55,7 +55,7 @@ const AddJadwal = () => {
                 console.error("Gagal mengambil list petugas:", err);
             });
 
-        axios.get(`${API_BASE_URL}/api/waste')
+        axios.get(`${API_BASE_URL}/api/waste`)
             .then(res => {
                 setListWaste(res.data);
             })
@@ -116,10 +116,10 @@ const AddJadwal = () => {
 
         try {
             if (isEdit) {
-                await axios.put(`http://localhost:8080/api/jadwal/${id}`, cleanPayload);
+                await axios.put(`${API_BASE_URL}/api/jadwal/${id}`, cleanPayload);
                 Swal.fire('Berhasil!', 'Jadwal petugas diperbarui', 'success');
             } else {
-                await axios.post(`${API_BASE_URL}/api/jadwal', cleanPayload);
+                await axios.post(`${API_BASE_URL}/api/jadwal`, cleanPayload);
                 Swal.fire('Berhasil!', 'Jadwal baru berhasil ditambahkan', 'success');
             }
             navigate('/admin/petugas'); 

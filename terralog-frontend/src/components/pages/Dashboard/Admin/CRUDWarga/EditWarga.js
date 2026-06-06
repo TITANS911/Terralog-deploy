@@ -26,7 +26,7 @@ const EditWarga = () => {
     const fetchWarga = async () => {
       setLoading(true);
       try {
-        const res = await axios.get(`http://127.0.0.1:8080/api/users/${id}`);
+        const res = await axios.get(`${API_BASE_URL}/api/users/${id}`);
         const data = res.data;
         setFormData({
           nama: data.nama || '',
@@ -61,7 +61,7 @@ const EditWarga = () => {
       // Opsional: Hapus password jika field kosong agar tidak update password kosong
       if (!payload.password) delete payload.password;
 
-      await axios.put(`http://127.0.0.1:8080/api/users/${id}`, payload);
+      await axios.put(`${API_BASE_URL}/api/users/${id}`, payload);
 
       Swal.fire({
         title: 'Berhasil!',

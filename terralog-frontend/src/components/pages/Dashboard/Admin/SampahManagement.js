@@ -18,7 +18,7 @@ import AdminSidebar from '../AdminSidebar';
 import API_BASE_URL from '../../../../config/api';
 
 // Ubah URL ini jika endpoint asli backend untuk list sampah warga berbeda
-const API_URL = `${API_BASE_URL}/api/kategori'; 
+const API_URL = `${API_BASE_URL}/api/kategori`; 
 
 const SampahManagement = () => {
   const navigate = useNavigate();

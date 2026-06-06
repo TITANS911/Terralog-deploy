@@ -32,7 +32,7 @@ const ProfilWarga = () => {
       
       try {
         setFetchLoading(true);
-        const res = await axios.get(`http://127.0.0.1:8080/api/users/${userId}`);
+        const res = await axios.get(`${API_BASE_URL}/api/users/${userId}`);
         const data = res.data;
         
         setFormData({
@@ -72,7 +72,7 @@ const ProfilWarga = () => {
       console.log("Updating profile with payload:", payload);
       console.log("User ID:", userId);
 
-      const response = await axios.put(`http://127.0.0.1:8080/api/users/${userId}`, payload);
+      const response = await axios.put(`${API_BASE_URL}/api/users/${userId}`, payload);
       console.log("Server response:", response.data);
 
       // Update localStorage juga

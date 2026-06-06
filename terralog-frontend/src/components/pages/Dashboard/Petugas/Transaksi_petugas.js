@@ -28,7 +28,7 @@ const TransaksiPetugas = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/api/transaksi');
+        const response = await axios.get(`${API_BASE_URL}/api/transaksi`);
         console.log("Data dari API:", response.data); // CEK INI DI CONSOLE F12
         console.log("Contoh 1 transaksi:", response.data[0]);
         if(response.data[0]) {

@@ -101,10 +101,10 @@ const LandingPage = () => {
     const fetchAllData = async () => {
       try {
         const [wasteRes, transaksiRes, usersRes, kategoriRes] = await Promise.all([
-          axios.get(`${API_BASE_URL}/api/waste'),
-          axios.get(`${API_BASE_URL}/api/transaksi'),
-          axios.get(`${API_BASE_URL}/api/users'),
-          axios.get(`${API_BASE_URL}/api/kategori')
+          axios.get(`${API_BASE_URL}/api/waste`),
+          axios.get(`${API_BASE_URL}/api/transaksi`),
+          axios.get(`${API_BASE_URL}/api/users`),
+          axios.get(`${API_BASE_URL}/api/kategori`)
         ]);
         
         setWasteData(wasteRes.data || []);

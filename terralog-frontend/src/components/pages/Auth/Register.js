@@ -31,7 +31,7 @@ const Register = () => {
         e.preventDefault();
         setLoading(true);
         try {
-            const response = await axios.post(`${API_BASE_URL}/api/auth/register', formData);
+            const response = await axios.post(`${API_BASE_URL}/api/auth/register`, formData);
             if (response.data.success) {
                 Swal.fire({ 
                     icon: 'success', 

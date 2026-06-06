@@ -54,7 +54,7 @@ const PenjemputanSampahPetugas = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`${API_BASE_URL}/api/jadwal');
+        const response = await axios.get(`${API_BASE_URL}/api/jadwal`);
         setJadwalList(response.data);
       } catch (err) {
         console.error('Gagal mengambil data:', err);

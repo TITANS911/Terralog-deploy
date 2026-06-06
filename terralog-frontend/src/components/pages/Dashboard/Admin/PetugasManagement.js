@@ -17,7 +17,7 @@ import AdminSidebar from '../AdminSidebar';
 
 import API_BASE_URL from '../../../../config/api';
 
-const API_URL = `${API_BASE_URL}/api/users';
+const API_URL = `${API_BASE_URL}/api/users`;
 
 const PetugasManagement = () => {
   const navigate = useNavigate();
@@ -67,7 +67,7 @@ const PetugasManagement = () => {
 
 // 3. Fungsi untuk mengambil data dari backend
 const fetchJadwal = () => {
-    axios.get(`${API_BASE_URL}/api/jadwal')
+    axios.get(`${API_BASE_URL}/api/jadwal`)
         .then(res => {
             console.log("Data Jadwal dari Backend:", res.data); // Untuk debug di console f12
             // Pastikan res.data berbentuk Array. Jika tidak, sesuaikan dengan struktur response backend-mu
@@ -81,7 +81,7 @@ const fetchJadwal = () => {
 
 useEffect(() => {
     // Ambil data dari api/waste untuk referensi nama warga & nama sampah
-    axios.get(`${API_BASE_URL}/api/waste')
+    axios.get(`${API_BASE_URL}/api/waste`)
         .then(res => {
             setListWaste(res.data || []);
         })
@@ -203,7 +203,7 @@ const filteredJadwal = useMemo(() => {
     }).then((result) => {
         if (result.isConfirmed) {
             // Mengirim request DELETE ke endpoint Spring Boot berdasarkan idJadwal
-            axios.delete(`http://localhost:8080/api/jadwal/${idJadwal}`)
+            axios.delete(`${API_BASE_URL}/api/jadwal/${idJadwal}`)
                 .then(() => {
                     Swal.fire(
                         'Terhapus!',

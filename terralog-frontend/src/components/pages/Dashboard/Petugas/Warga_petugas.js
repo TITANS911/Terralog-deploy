@@ -20,7 +20,7 @@ const WargaPetugas = () => {
   const fetchUsers = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`${API_BASE_URL}/api/users');
+      const response = await axios.get(`${API_BASE_URL}/api/users`);
       // Pastikan data yang diterima adalah array
       const allUsers = Array.isArray(response.data) ? response.data : [];
       const dataWargaHanya = allUsers.filter(

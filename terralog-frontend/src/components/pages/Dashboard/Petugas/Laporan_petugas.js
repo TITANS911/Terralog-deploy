@@ -130,7 +130,7 @@ useEffect(() => {
   const fetchTransaksi = async () => {
     try {
       setLoading(true);
-      const res = await axios.get(`${API_BASE_URL}/api/transaksi');
+      const res = await axios.get(`${API_BASE_URL}/api/transaksi`);
       const allTransaksi = res.data || [];
 
       // Filter berdasarkan ID Petugas
@@ -155,8 +155,8 @@ useEffect(() => {
   const fetchPendukung = async () => {
     try {
       const [kategoriRes, usersRes] = await Promise.all([
-        axios.get(`${API_BASE_URL}/api/kategori'),
-        axios.get(`${API_BASE_URL}/api/users')
+        axios.get(`${API_BASE_URL}/api/kategori`),
+        axios.get(`${API_BASE_URL}/api/users`)
       ]);
 
       setKategoriList(kategoriRes.data || []);

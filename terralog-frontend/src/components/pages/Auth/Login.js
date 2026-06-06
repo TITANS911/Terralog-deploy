@@ -29,7 +29,7 @@ const Login = () => {
     const handleGoogleCallback = async (response) => {
         setLoading(true);
         try {
-            const res = await axios.post(`${API_BASE_URL}/api/auth/google-login', {
+            const res = await axios.post(`${API_BASE_URL}/api/auth/google-login`, {
                 credential: response.credential
             });
 
@@ -115,7 +115,7 @@ const Login = () => {
         e.preventDefault();
         setLoading(true);
         try {
-            const response = await axios.post(`${API_BASE_URL}/api/auth/login', {
+            const response = await axios.post(`${API_BASE_URL}/api/auth/login`, {
                 username: username, 
                 password: password
             });

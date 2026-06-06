@@ -27,7 +27,7 @@ const EditPetugas = () => {
     const loadPetugas = async () => {
         try {
             console.log("Mengambil data untuk ID:", id); // Cek apakah ID-nya muncul
-            const res = await axios.get(`http://127.0.0.1:8080/api/users/${id}`);
+            const res = await axios.get(`${API_BASE_URL}/api/users/${id}`);
             console.log("Data mentah dari Java:", res.data); // Cek nama field di sini
             
             const data = res.data;
@@ -61,7 +61,7 @@ const EditPetugas = () => {
             // Jangan kirim password kalau user tidak mengetik apa-apa
             if (!payload.password) delete payload.password;
 
-            await axios.put(`http://127.0.0.1:8080/api/users/${id}`, payload);
+            await axios.put(`${API_BASE_URL}/api/users/${id}`, payload);
             Swal.fire('Berhasil!', 'Data petugas telah diperbarui', 'success');
             navigate('/admin/pengguna');
         } catch (error) {

@@ -31,3 +31,14 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Temporary Fix Scripts ###
+fix-frontend.js
+fix-frontend-super.js
+fix-frontend.ps1
+fix-template-literals.js
+fix-template-literals-v2.js
+error.txt
+error_log.txt
+log_error.txt
+getKategoriSchema.jsh

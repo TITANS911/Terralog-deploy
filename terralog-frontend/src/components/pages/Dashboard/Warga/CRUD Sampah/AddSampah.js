@@ -54,7 +54,7 @@ const AddSampah = () => {
     const fetchKategori = async () => {
       if (!isProfileComplete) return;
       try {
-        const res = await axios.get(`${API_BASE_URL}/api/kategori');
+        const res = await axios.get(`${API_BASE_URL}/api/kategori`);
         console.log("Data Kategori dari Backend:", res.data);
         setCategories(res.data);
       } catch (err) {
@@ -95,7 +95,7 @@ const AddSampah = () => {
 
     try {
       // 3. Pastikan endpoint di backend sudah sesuai menerima struktur ini
-      await axios.post(`${API_BASE_URL}/api/waste', payload);
+      await axios.post(`${API_BASE_URL}/api/waste`, payload);
       
       Swal.fire({ title: 'Sukses!', text: 'Laporan berhasil dibuat', icon: 'success', timer: 1500 });
       navigate('/buang-sampah');

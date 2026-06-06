@@ -16,7 +16,7 @@ const DetailTransaksi = () => {
     const fetchDetail = async () => {
       try {
         // Panggil berdasarkan transaksiId
-        const response = await axios.get(`http://127.0.0.1:8080/api/transaksi/${id}`);
+        const response = await axios.get(`${API_BASE_URL}/api/transaksi/${id}`);
         setData(response.data);
       } catch (error) {
         console.error("Gagal ambil detail:", error);
@@ -47,7 +47,7 @@ const DetailTransaksi = () => {
           {/* Foto dari folder uploads */}
           <div style={styles.imageContainer}>
             <img 
-              src={`http://127.0.0.1:8080/uploads/${data.foto}`} 
+              src={`${API_BASE_URL}/uploads/${data.foto}`} 
               alt="Foto Sampah" 
               style={styles.image}
               onError={(e) => e.target.src = '/placeholder.jpg'}

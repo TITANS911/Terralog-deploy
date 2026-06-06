@@ -20,7 +20,7 @@ const AddKategori = () => {
     // --- LOGIKA FETCH DATA UNTUK EDIT ---
     useEffect(() => {
         if (isEdit) {
-            axios.get(`http://localhost:8080/api/kategori/${id}`)
+            axios.get(`${API_BASE_URL}/api/kategori/${id}`)
                 .then(res => {
                     setFormData({
                         namaKategori: res.data.namaKategori || ''
@@ -45,10 +45,10 @@ const AddKategori = () => {
         
         try {
             if (isEdit) {
-                await axios.put(`http://localhost:8080/api/kategori/${id}`, formData);
+                await axios.put(`${API_BASE_URL}/api/kategori/${id}`, formData);
                 Swal.fire('Berhasil!', 'Kategori diperbarui', 'success');
             } else {
-                await axios.post(`${API_BASE_URL}/api/kategori', formData);
+                await axios.post(`${API_BASE_URL}/api/kategori`, formData);
                 Swal.fire('Berhasil!', 'Kategori baru ditambahkan', 'success');
             }
             navigate('/admin/sampah'); // Sesuaikan rute kembali kamu

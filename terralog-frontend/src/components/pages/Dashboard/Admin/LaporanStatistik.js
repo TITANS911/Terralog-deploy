@@ -52,11 +52,11 @@ const LaporanStatistik = () => {
     try {
       setLoading(true);
       // Panggil endpoint yang benar: /api/waste
-      const response = await axios.get(`${API_BASE_URL}/api/waste');
+      const response = await axios.get(`${API_BASE_URL}/api/waste`);
       const allWaste = response.data || [];
       // const allWaste = mockWasteData;
 
-      const kategoriRes = await axios.get(`${API_BASE_URL}/api/kategori');
+      const kategoriRes = await axios.get(`${API_BASE_URL}/api/kategori`);
       setKategoriList(kategoriRes.data || []);
 
       // 1. FILTER: Ambil hanya yang statusnya "SELESAI"
@@ -113,9 +113,9 @@ useEffect(() => {
       try {
         // Panggil ketiga API secara bersamaan
         const [wasteRes, transaksiRes, usersRes] = await Promise.all([
-          axios.get(`${API_BASE_URL}/api/waste'),
-          axios.get(`${API_BASE_URL}/api/transaksi'),
-          axios.get(`${API_BASE_URL}/api/users')
+          axios.get(`${API_BASE_URL}/api/waste`),
+          axios.get(`${API_BASE_URL}/api/transaksi`),
+          axios.get(`${API_BASE_URL}/api/users`)
         ]);
         console.log("Data Users dari API:", usersRes.data);
         // Hitung total berat sampah (asumsi fieldnya adalah 'berat')
@@ -211,9 +211,9 @@ useEffect(() => {
     const fetchDataFull = async () => {
       try {
         const [wasteRes, transaksiRes, usersRes] = await Promise.all([
-          axios.get(`${API_BASE_URL}/api/waste'),
-          axios.get(`${API_BASE_URL}/api/transaksi'),
-          axios.get(`${API_BASE_URL}/api/users')
+          axios.get(`${API_BASE_URL}/api/waste`),
+          axios.get(`${API_BASE_URL}/api/transaksi`),
+          axios.get(`${API_BASE_URL}/api/users`)
         ]);
         
         setAllWaste(wasteRes.data || []);

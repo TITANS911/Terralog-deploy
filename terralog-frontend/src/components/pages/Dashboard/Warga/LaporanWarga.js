@@ -103,7 +103,7 @@ const LaporanWarga = () => {
       
       try {
         setLoading(true);
-        const res = await axios.get(`http://127.0.0.1:8080/api/waste/user/${currentUserId}`);
+        const res = await axios.get(`${API_BASE_URL}/api/waste/user/${currentUserId}`);
         const data = Array.isArray(res.data) ? res.data : [];
         
         setAllWaste(data);
@@ -121,7 +121,7 @@ const LaporanWarga = () => {
   useEffect(() => {
     const fetchKategori = async () => {
       try {
-        const res = await axios.get(`${API_BASE_URL}/api/kategori');
+        const res = await axios.get(`${API_BASE_URL}/api/kategori`);
         setKategoriList(res.data || []);
       } catch (error) {
         console.error("Gagal ambil kategori:", error);

@@ -21,7 +21,7 @@ import AdminSidebar from '../AdminSidebar';
 
 import API_BASE_URL from '../../../../config/api';
 
-const API_URL = `${API_BASE_URL}/api/waste';
+const API_URL = `${API_BASE_URL}/api/waste`;
 
 const TransaksiManagement = () => {
 
@@ -45,7 +45,7 @@ const TransaksiManagement = () => {
     setErrorMessage('');
 
     try {
-      const response = await axios.get(`${API_BASE_URL}/api/transaksi');
+      const response = await axios.get(`${API_BASE_URL}/api/transaksi`);
       setTransaksi(Array.isArray(response.data) ? response.data : []);
     } catch (error) {
       console.error('Gagal mengambil data transaksi:', error);
@@ -75,7 +75,7 @@ const TransaksiManagement = () => {
 
   const fetchWaste = async () => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/api/waste');
+    const response = await axios.get(`${API_BASE_URL}/api/waste`);
     setSampah(Array.isArray(response.data) ? response.data : []);
   } catch (error) {
     console.error('Gagal mengambil data sampah:', error);
@@ -202,7 +202,7 @@ const getBerat = (item) => {
 
   const handleStatusChange = async (id, newStatus) => {
     try {
-      await axios.put(`http://localhost:8080/api/waste/${id}/status`, newStatus, {
+      await axios.put(`${API_BASE_URL}/api/waste/${id}/status`, newStatus, {
         headers: { 'Content-Type': 'text/plain' }
       });
 
@@ -228,7 +228,7 @@ const getBerat = (item) => {
 
   if (result.isConfirmed) {
     try {
-      await axios.delete(`http://127.0.0.1:8080/api/transaksi/${id}`);
+      await axios.delete(`${API_BASE_URL}/api/transaksi/${id}`);
       Swal.fire('Terhapus!', 'Data berhasil dihapus.', 'success');
       fetchTransaksi(); // Refresh data setelah hapus
     } catch (error) {

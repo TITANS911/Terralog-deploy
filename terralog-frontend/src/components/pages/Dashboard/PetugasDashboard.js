@@ -69,19 +69,19 @@ const PetugasDashboard = () => {
         setLoading(true);
         
         // Fetch users
-        const usersResponse = await axios.get(`${API_BASE_URL}/api/users');
+        const usersResponse = await axios.get(`${API_BASE_URL}/api/users`);
         const allUsers = usersResponse.data;
         
         // Fetch transactions
-        const transaksiResponse = await axios.get(`${API_BASE_URL}/api/transaksi');
+        const transaksiResponse = await axios.get(`${API_BASE_URL}/api/transaksi`);
         const allTransaksi = transaksiResponse.data;
         
         // Fetch kategori
-        const kategoriResponse = await axios.get(`${API_BASE_URL}/api/kategori');
+        const kategoriResponse = await axios.get(`${API_BASE_URL}/api/kategori`);
         setKategoriList(kategoriResponse.data || []);
         
         // Fetch jadwal
-        const jadwalResponse = await axios.get(`${API_BASE_URL}/api/jadwal');
+        const jadwalResponse = await axios.get(`${API_BASE_URL}/api/jadwal`);
         setJadwalList(jadwalResponse.data || []);
         
         // Filter transaksi hanya yang milik petugas ini

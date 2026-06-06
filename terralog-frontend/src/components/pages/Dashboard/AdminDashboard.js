@@ -86,13 +86,13 @@ const AdminDashboard = () => {
 useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/api/users');
+        const response = await fetch(`${API_BASE_URL}/api/users`);
         const allUsers = await response.json();
 
-        const transaksiResponse = await fetch(`${API_BASE_URL}/api/transaksi');
+        const transaksiResponse = await fetch(`${API_BASE_URL}/api/transaksi`);
         const allTransaksi = await transaksiResponse.json();
 
-        const wasteResponse = await fetch(`${API_BASE_URL}/api/waste');
+        const wasteResponse = await fetch(`${API_BASE_URL}/api/waste`);
         const allWaste = await wasteResponse.json();
 
         // 1. Filter hanya status "SELESAI"
@@ -151,7 +151,7 @@ useEffect(() => {
 useEffect(() => {
   const fetchJadwal = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/api/jadwal');
+      const response = await axios.get(`${API_BASE_URL}/api/jadwal`);
       
       const today = new Date().toLocaleDateString('en-CA');
       
@@ -246,9 +246,9 @@ const filteredData = useMemo(() => {
     const fetchDataFull = async () => {
       try {
         const [wasteRes, transaksiRes, usersRes] = await Promise.all([
-          axios.get(`${API_BASE_URL}/api/waste'),
-          axios.get(`${API_BASE_URL}/api/transaksi'),
-          axios.get(`${API_BASE_URL}/api/users')
+          axios.get(`${API_BASE_URL}/api/waste`),
+          axios.get(`${API_BASE_URL}/api/transaksi`),
+          axios.get(`${API_BASE_URL}/api/users`)
         ]);
         
         setAllWaste(wasteRes.data || []);

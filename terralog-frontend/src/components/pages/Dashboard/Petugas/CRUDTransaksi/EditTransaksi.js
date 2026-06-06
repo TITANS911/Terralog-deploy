@@ -35,15 +35,15 @@ const EditTransaksi = () => {
       setLoading(true);
       try {
         const [wargaRes, katRes] = await Promise.all([
-          axios.get(`${API_BASE_URL}/api/users'),
-          axios.get(`${API_BASE_URL}/api/kategori')
+          axios.get(`${API_BASE_URL}/api/users`),
+          axios.get(`${API_BASE_URL}/api/kategori`)
         ]);
         
         setWargaList(wargaRes.data.filter(u => u.role?.toUpperCase() === 'WARGA'));
         setKategoriList(katRes.data);
 
         if (id && id !== 'undefined') {
-          const transRes = await axios.get(`http://127.0.0.1:8080/api/transaksi/${id}`);
+          const transRes = await axios.get(`${API_BASE_URL}/api/transaksi/${id}`);
           const data = transRes.data;
 
           setFormData({
@@ -57,7 +57,7 @@ const EditTransaksi = () => {
           });
 
           if (data.foto) {
-            setImagePreview(`http://127.0.0.1:8080/uploads/${data.foto}`);
+            setImagePreview(`${API_BASE_URL}/uploads/${data.foto}`);
           }
         }
       } catch (err) {
@@ -107,7 +107,7 @@ const EditTransaksi = () => {
       if (formData.foto instanceof File) {
         const data = new FormData();
         data.append('file', formData.foto);
-        const uploadRes = await axios.post(`${API_BASE_URL}/api/transaksi/upload', data, {
+        const uploadRes = await axios.post(`${API_BASE_URL}/api/transaksi/upload`, data, {
           headers: { 'Content-Type': 'multipart/form-data' }
         });
         finalFileName = uploadRes.data;
@@ -123,7 +123,7 @@ const EditTransaksi = () => {
         totalBerat: Number(formData.totalBerat)
       };
 
-      await axios.put(`http://127.0.0.1:8080/api/transaksi/${id}`, jsonPayload, {
+      await axios.put(`${API_BASE_URL}/api/transaksi/${id}`, jsonPayload, {
         headers: { 'Content-Type': 'application/json' }
       });
 

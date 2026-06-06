@@ -26,7 +26,7 @@ const AddWarga = () => {
     useEffect(() => {
     if (isEdit) {
         console.log("Sedang mengambil data untuk ID:", id); // Cek ID-nya muncul gak
-        axios.get(`http://127.0.0.1:8080/api/users/${id}`)
+        axios.get(`${API_BASE_URL}/api/users/${id}`)
             .then(res => {
                 console.log("Data dari Java:", res.data); // Cek isi datanya
                 setFormData({
@@ -75,11 +75,11 @@ const AddWarga = () => {
         try {
             if (isEdit) {
                 // Gunakan PUT untuk update
-                await axios.put(`http://127.0.0.1:8080/api/users/${id}`, payload);
+                await axios.put(`${API_BASE_URL}/api/users/${id}`, payload);
                 Swal.fire('Berhasil!', 'Data warga diperbarui', 'success');
             } else {
                 // Gunakan POST untuk tambah baru
-                await axios.post(`${API_BASE_URL}/api/users', payload);
+                await axios.post(`${API_BASE_URL}/api/users`, payload);
                 Swal.fire('Berhasil!', 'Warga baru ditambahkan', 'success');
             }
             navigate('/admin/pengguna');

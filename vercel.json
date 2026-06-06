@@ -1,0 +1,23 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "terralog-frontend/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "build"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/terralog-frontend/$1"
+    },
+    {
+      "src": "/[^.]+",
+      "dest": "/terralog-frontend/index.html",
+      "status": 200
+    }
+  ]
+}

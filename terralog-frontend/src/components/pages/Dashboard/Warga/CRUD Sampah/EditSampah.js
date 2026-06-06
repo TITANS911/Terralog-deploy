@@ -54,8 +54,8 @@ const EditSampah = () => {
       setLoading(true);
       try {
         const [catRes, wasteRes] = await Promise.all([
-          axios.get(`${API_BASE_URL}/api/kategori'),
-          axios.get(`http://127.0.0.1:8080/api/waste/${id}`)
+          axios.get(`${API_BASE_URL}/api/kategori`),
+          axios.get(`${API_BASE_URL}/api/waste/${id}`)
         ]);
 
         console.log("Categories data:", catRes.data);
@@ -121,7 +121,7 @@ const EditSampah = () => {
 
     try {
       console.log("Sending PUT request with payload:", payload);
-      const response = await axios.put(`http://127.0.0.1:8080/api/waste/${id}`, payload);
+      const response = await axios.put(`${API_BASE_URL}/api/waste/${id}`, payload);
       console.log("Response from server:", response.data);
 
       if (response.status === 200) {

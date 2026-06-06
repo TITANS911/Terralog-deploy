@@ -17,7 +17,7 @@ import AdminSidebar from '../AdminSidebar';
 
 import API_BASE_URL from '../../../../config/api';
 
-const API_URL = `${API_BASE_URL}/api/users';
+const API_URL = `${API_BASE_URL}/api/users`;
 
 const UserManagement = () => {
   const navigate = useNavigate();

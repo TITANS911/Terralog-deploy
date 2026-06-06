@@ -25,7 +25,7 @@ const EditJadwal = () => {
 
     useEffect(() => {
         if (isEdit) {
-            axios.get(`http://localhost:8080/api/jadwal/${id}`)
+            axios.get(`${API_BASE_URL}/api/jadwal/${id}`)
                 .then(res => {
                     const data = res.data;
                     setFormData({
@@ -39,8 +39,8 @@ const EditJadwal = () => {
                 .catch(() => Swal.fire('Error', 'Gagal memuat data', 'error'));
         }
         
-        axios.get(`${API_BASE_URL}/api/users').then(res => setListPetugas(res.data));
-        axios.get(`${API_BASE_URL}/api/waste').then(res => setListWaste(res.data));
+        axios.get(`${API_BASE_URL}/api/users`).then(res => setListPetugas(res.data));
+        axios.get(`${API_BASE_URL}/api/waste`).then(res => setListWaste(res.data));
     }, [id, isEdit]);
 
     const handleWasteChange = (e) => {
@@ -62,8 +62,8 @@ const EditJadwal = () => {
         };
 
         try {
-            if (isEdit) await axios.put(`http://localhost:8080/api/jadwal/${id}`, payload);
-            else await axios.post(`${API_BASE_URL}/api/jadwal', payload);
+            if (isEdit) await axios.put(`${API_BASE_URL}/api/jadwal/${id}`, payload);
+            else await axios.post(`${API_BASE_URL}/api/jadwal`, payload);
             
             Swal.fire('Berhasil!', 'Data jadwal berhasil disimpan', 'success');
             navigate('/admin/petugas');

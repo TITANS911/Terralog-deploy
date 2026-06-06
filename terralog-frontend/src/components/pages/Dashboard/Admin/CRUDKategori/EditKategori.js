@@ -22,7 +22,7 @@ const EditKategori = () => {
 useEffect(() => {
     const loadKategori = async () => {
         try {
-            const res = await axios.get(`http://127.0.0.1:8080/api/kategori/${id}`);
+            const res = await axios.get(`${API_BASE_URL}/api/kategori/${id}`);
             if (res.data) {
                 setFormData({
                     // Tambahkan idKategori ke dalam state agar sinkron dengan model Java
@@ -46,7 +46,7 @@ const handleUpdate = async (e) => {
     e.preventDefault();
     try {
         // Kirim formData yang sekarang sudah berisi {idKategori, namaKategori}
-        await axios.put(`http://127.0.0.1:8080/api/kategori/${id}`, formData);
+        await axios.put(`${API_BASE_URL}/api/kategori/${id}`, formData);
         
         Swal.fire({
             title: 'Berhasil!',

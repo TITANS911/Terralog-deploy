@@ -43,8 +43,8 @@ const BuangSampah = () => {
     try {
       // Fetch both categories and waste data
       const [categoriesRes, wasteRes] = await Promise.all([
-        axios.get(`${API_BASE_URL}/api/kategori'),
-        axios.get(`http://localhost:8080/api/waste/user/${currentUserId}`)
+        axios.get(`${API_BASE_URL}/api/kategori`),
+        axios.get(`${API_BASE_URL}/api/waste/user/${currentUserId}`)
       ]);
       
       setCategories(Array.isArray(categoriesRes.data) ? categoriesRes.data : []);
@@ -119,7 +119,7 @@ const BuangSampah = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          await axios.delete(`http://localhost:8080/api/waste/${id}`);
+          await axios.delete(`${API_BASE_URL}/api/waste/${id}`);
 
           Swal.fire({
             icon: 'success',

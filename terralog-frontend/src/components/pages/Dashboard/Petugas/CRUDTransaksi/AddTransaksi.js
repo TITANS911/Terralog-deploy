@@ -35,7 +35,7 @@ const AddTransaksi = () => {
   useEffect(() => {
     const fetchWarga = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/api/users');
+        const response = await axios.get(`${API_BASE_URL}/api/users`);
         // Filter hanya user yang rolenya WARGA
         const hanyaWarga = response.data.filter(user => user.role?.toUpperCase() === 'WARGA');
         setWargaList(hanyaWarga);
@@ -85,7 +85,7 @@ const AddTransaksi = () => {
   const fetchSupportingData = async () => {
     try {
       const [katRes] = await Promise.all([
-        axios.get(`${API_BASE_URL}/api/kategori'),
+        axios.get(`${API_BASE_URL}/api/kategori`),
       ]);
       setKategoriList(katRes.data);
     } catch (err) {
@@ -110,7 +110,7 @@ const AddTransaksi = () => {
       data.append('file', formData.foto);
 
       // Kirim file ke endpoint upload
-      const uploadRes = await axios.post(`${API_BASE_URL}/api/transaksi/upload', data, {
+      const uploadRes = await axios.post(`${API_BASE_URL}/api/transaksi/upload`, data, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       fileName = uploadRes.data; // Nama file yang sudah tersimpan di server
@@ -129,7 +129,7 @@ const AddTransaksi = () => {
       foto: fileName // Gunakan nama file yang sudah di-upload
     };
 
-    await axios.post(`${API_BASE_URL}/api/transaksi', jsonPayload, {
+    await axios.post(`${API_BASE_URL}/api/transaksi`, jsonPayload, {
       headers: { 'Content-Type': 'application/json' }
     });
 
