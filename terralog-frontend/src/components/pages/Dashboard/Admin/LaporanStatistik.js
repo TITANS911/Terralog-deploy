@@ -33,6 +33,13 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 const normalizeCategoryName = (value) => (value || '').toString().trim().toLowerCase();
 const getWasteCategoryName = (item) => item?.kategori?.namaKategori || item?.kategoriSampah || 'Lainnya';
+const getCategoryOptions = (kategoriList) => (
+  Array.isArray(kategoriList)
+    ? kategoriList
+        .filter((item) => item && item.namaKategori)
+        .map((item) => item.namaKategori)
+    : []
+);
 
 const LaporanStatistik = () => {
   const [chartData, setChartData] = useState([]); // Ganti monthlyTrend statis
@@ -64,7 +71,7 @@ const LaporanStatistik = () => {
       setKategoriList(kategoriRes.data || []);
 
       // 1. FILTER: Ambil hanya yang statusnya "SELESAI"
-      const dataSelesai = safeAllWaste.filter(item => item.status === "SELESAI");
+      const dataSelesai = safeAllWaste.filter((item) => item && item.status === "SELESAI");
 
       // 2. FILTER KATEGORI: (Jika user memilih kategori tertentu)
       const filtered = jenisSampah === 'Semua'
@@ -311,7 +318,7 @@ const donutChartData = useMemo(() => ({
               value={jenisSampah}
               onChange={(e) => setJenisSampah(e.target.value)}
               // Ganti item.nama menjadi item.namaKategori
-              options={['Semua', ...(Array.isArray(kategoriList) ? kategoriList.map(item => item.namaKategori) : [])]}
+              options={['Semua', ...getCategoryOptions(kategoriList)]}
             />
           </section>
 

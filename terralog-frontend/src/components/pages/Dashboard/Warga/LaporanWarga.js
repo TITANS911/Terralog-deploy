@@ -27,6 +27,13 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 const normalizeCategoryName = (value) => (value || '').toString().trim().toLowerCase();
 const getWasteCategoryName = (item) => item?.kategori?.namaKategori || item?.kategoriSampah || 'Lainnya';
+const getCategoryOptions = (kategoriList) => (
+  Array.isArray(kategoriList)
+    ? kategoriList
+        .filter((item) => item && item.namaKategori)
+        .map((item) => item.namaKategori)
+    : []
+);
 
 
 const LaporanWarga = () => {
@@ -64,7 +71,7 @@ const LaporanWarga = () => {
   // Filter hanya data yang statusnya bukan pending
   const filteredWasteData = useMemo(() => {
     const safeAllWaste = Array.isArray(allWaste) ? allWaste : [];
-    return safeAllWaste.filter(w => w.status?.toLowerCase() !== 'pending');
+    return safeAllWaste.filter((w) => w && w.status?.toLowerCase() !== 'pending');
   }, [allWaste]);
 
   // useEffect untuk memproses data waste dan chart
@@ -235,7 +242,7 @@ const LaporanWarga = () => {
               label="Jenis Sampah"
               value={jenisSampah}
               onChange={(e) => setJenisSampah(e.target.value)}
-              options={['Semua', ...(Array.isArray(kategoriList) ? kategoriList.map(item => item.namaKategori) : [])]}
+              options={['Semua', ...getCategoryOptions(kategoriList)]}
             />
           </section>
         
