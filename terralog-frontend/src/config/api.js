@@ -11,7 +11,7 @@ if (!API_BASE_URL.startsWith('http://') && !API_BASE_URL.startsWith('https://'))
     }
 }
 
-export const getUploadUrl = (fotoPath) => {
+const normalizeUploadPath = (fotoPath) => {
     if (!fotoPath) return '';
 
     const cleanedPath = fotoPath.toString().trim();
@@ -30,6 +30,23 @@ export const getUploadUrl = (fotoPath) => {
             : slashNormalizedPath.startsWith('/uploads/')
                 ? slashNormalizedPath
                 : `/uploads/${slashNormalizedPath.split('/').pop()}`;
+};
+
+export const getUploadApiUrl = (fotoPath) => {
+    const normalizedPath = normalizeUploadPath(fotoPath);
+    if (!normalizedPath) return '';
+    if (normalizedPath.startsWith('http://') || normalizedPath.startsWith('https://')) {
+        return normalizedPath;
+    }
+    return `${API_BASE_URL}${normalizedPath}`;
+};
+
+export const getUploadUrl = (fotoPath) => {
+    const normalizedPath = normalizeUploadPath(fotoPath);
+    if (!normalizedPath) return '';
+    if (normalizedPath.startsWith('http://') || normalizedPath.startsWith('https://')) {
+        return normalizedPath;
+    }
 
     if (typeof window !== 'undefined') {
         const isLocalhost =
@@ -37,11 +54,24 @@ export const getUploadUrl = (fotoPath) => {
             window.location.hostname === '127.0.0.1';
 
         if (!isLocalhost) {
-            return relativeUploadPath;
+            return normalizedPath;
         }
     }
 
-    return `${API_BASE_URL}${relativeUploadPath}`;
+    return `${API_BASE_URL}${normalizedPath}`;
+};
+
+export const fetchUploadBlobUrl = async (fotoPath) => {
+    const uploadUrl = getUploadApiUrl(fotoPath);
+    if (!uploadUrl) return '';
+
+    const response = await fetch(uploadUrl, { mode: 'cors' });
+    if (!response.ok) {
+        throw new Error(`Gagal memuat gambar (${response.status})`);
+    }
+
+    const blob = await response.blob();
+    return URL.createObjectURL(blob);
 };
 
 export default API_BASE_URL;

@@ -6,7 +6,7 @@ import { Search, Upload, ArrowLeft } from 'lucide-react';
 import PetugasSidebar from '../../PetugasSidebar'; 
 import AdminSidebar from '../../AdminSidebar';
 
-import API_BASE_URL, { getUploadUrl } from '../../../../../config/api';
+import API_BASE_URL, { fetchUploadBlobUrl } from '../../../../../config/api';
 
 const EditTransaksi = () => {
   const navigate = useNavigate();
@@ -56,9 +56,6 @@ const EditTransaksi = () => {
             totalBerat: data.totalBerat || ''
           });
 
-          if (data.foto) {
-            setImagePreview(getUploadUrl(data.foto));
-          }
         }
       } catch (err) {
         console.error("Gagal inisialisasi data:", err);
@@ -70,6 +67,34 @@ const EditTransaksi = () => {
     
     initData();
   }, [id, petugasId]);
+
+  useEffect(() => {
+    let blobUrl = '';
+    let isActive = true;
+
+    const loadExistingImage = async () => {
+      if (!formData.foto || formData.foto instanceof File) return;
+
+      try {
+        blobUrl = await fetchUploadBlobUrl(formData.foto);
+        if (isActive) {
+          setImagePreview(blobUrl);
+        } else if (blobUrl) {
+          URL.revokeObjectURL(blobUrl);
+        }
+      } catch (error) {
+        console.error('Gagal memuat preview foto transaksi:', error);
+        if (isActive) setImagePreview(null);
+      }
+    };
+
+    loadExistingImage();
+
+    return () => {
+      isActive = false;
+      if (blobUrl) URL.revokeObjectURL(blobUrl);
+    };
+  }, [formData.foto]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

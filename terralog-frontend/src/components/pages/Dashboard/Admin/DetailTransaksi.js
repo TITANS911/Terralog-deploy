@@ -4,7 +4,7 @@ import axios from 'axios';
 import { ArrowLeft } from 'lucide-react';
 import AdminSidebar from '../AdminSidebar';
 
-import API_BASE_URL, { getUploadUrl } from '../../../../config/api';
+import API_BASE_URL, { fetchUploadBlobUrl } from '../../../../config/api';
 
 const DetailTransaksi = () => {
   const { id } = useParams();
@@ -12,6 +12,7 @@ const DetailTransaksi = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
+  const [imageSrc, setImageSrc] = useState('');
 
   useEffect(() => {
     const fetchDetail = async () => {
@@ -33,6 +34,37 @@ const DetailTransaksi = () => {
     fetchDetail();
   }, [id]);
 
+  useEffect(() => {
+    let blobUrl = '';
+    let isActive = true;
+
+    const loadImage = async () => {
+      if (!data?.foto) {
+        setImageSrc('');
+        return;
+      }
+
+      try {
+        blobUrl = await fetchUploadBlobUrl(data.foto);
+        if (isActive) {
+          setImageSrc(blobUrl);
+        } else if (blobUrl) {
+          URL.revokeObjectURL(blobUrl);
+        }
+      } catch (error) {
+        console.error('Gagal memuat foto transaksi:', error);
+        if (isActive) setImageSrc('');
+      }
+    };
+
+    loadImage();
+
+    return () => {
+      isActive = false;
+      if (blobUrl) URL.revokeObjectURL(blobUrl);
+    };
+  }, [data?.foto]);
+
   if (loading) return <div>Memuat...</div>;
   if (!data) return <div>{errorMessage || 'Data tidak ditemukan!'}</div>;
 
@@ -52,12 +84,16 @@ const DetailTransaksi = () => {
         <div style={styles.formElement}>
           {/* Foto dari folder uploads */}
           <div style={styles.imageContainer}>
-            <img 
-              src={getUploadUrl(data.foto)}
-              alt="Foto Sampah" 
-              style={styles.image}
-              onError={(e) => e.target.src = '/placeholder.jpg'}
-            />
+            {imageSrc ? (
+              <img
+                src={imageSrc}
+                alt="Foto Sampah"
+                style={styles.image}
+                onError={() => setImageSrc('')}
+              />
+            ) : (
+              <div style={styles.imageFallback}>Foto tidak tersedia</div>
+            )}
           </div>
           
           <div style={styles.formGroup}>
@@ -101,6 +137,15 @@ const styles = {
     width: '100%',
     height: '100%',
     objectFit: 'cover' // <--- PENTING: Akan memotong (crop) sisi foto agar persegi penuh
+  },
+  imageFallback: {
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: '#666',
+    fontWeight: '600'
   }
 };
 
