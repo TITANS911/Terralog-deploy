@@ -9,6 +9,7 @@ import PetugasSidebar from '../PetugasSidebar'; // Pastikan path import sesuai s
 
 const WargaPetugas = () => {
   // --- STATE & DATA ---
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -122,11 +123,11 @@ const WargaPetugas = () => {
               </thead>
                 <tbody>
                   {loading ? (
-                    <tr><td colSpan="5" style={styles.tdPlaceholder}>Memuat data warga...</td></tr>
+                    <tr><td colSpan="6" style={styles.tdPlaceholder}>Memuat data warga...</td></tr>
                   ) : currentData.length > 0 ? (
                     currentData.map((warga, index) => (
                       <tr key={warga.userId || index} style={styles.tableRow}>
-                        <td style={styles.td}>{index + 1}</td>
+                        <td style={styles.td}>{(currentPage - 1) * itemsPerPage + index + 1}</td>
                         <td style={{ ...styles.td, fontWeight: '600' }}>{warga.nama || '-'}</td>
                         <td style={styles.td}>{warga.username || '-'}</td>
                         <td style={styles.td}>{warga.alamat || '-'}</td>
@@ -135,7 +136,7 @@ const WargaPetugas = () => {
                           <div style={styles.actionGroup}>
                             <button
                               style={styles.editButton}
-                              onClick={() => navigate(`/admin/edit-warga/${warga.userId}`)}
+                              onClick={() => navigate(`/petugas/edit-warga/${warga.userId}`)}
                             >
                               <Edit size={22} />
                             </button>
@@ -147,7 +148,7 @@ const WargaPetugas = () => {
                     /* Baris Kosong Sesuai Gambar Mockup jika data tidak ada */
                     [...Array(5)].map((_, i) => (
                         <tr key={i} style={styles.tableRowEmpty}>
-                          <td colSpan="5">&nbsp;</td>
+                          <td colSpan="6">&nbsp;</td>
                         </tr>
                       ))
                     )}

@@ -84,6 +84,7 @@ function App() {
         <Route path="/petugas/penjemputan" element={<ProtectedRoute><PenjemputanSampah_Petugas /></ProtectedRoute>} />
         <Route path="/petugas/transaksi" element={<ProtectedRoute><Transaksi_Petugas /></ProtectedRoute>} />
         <Route path="/petugas/warga" element={<ProtectedRoute><Warga_Petugas /></ProtectedRoute>} />
+        <Route path="/petugas/edit-warga/:id" element={<ProtectedRoute><EditWarga /></ProtectedRoute>} />
         {/* CRUD Transaksi Petugas */}
         <Route path="/petugas/tambah-transaksi" element={<ProtectedRoute><AddTransaksi /></ProtectedRoute>} />
         <Route path="/petugas/edit-transaksi/:id" element={<ProtectedRoute><EditTransaksi /></ProtectedRoute>} />

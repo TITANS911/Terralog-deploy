@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import { ArrowLeft } from 'lucide-react';
 import API_BASE_URL from '../../../../../config/api';
 
 import AdminSidebar from '../../AdminSidebar'; // Sesuaikan path
+import PetugasSidebar from '../../PetugasSidebar';
 
 const EditWarga = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { id } = useParams(); // Ambil ID dari URL
   const [loading, setLoading] = useState(false);
+  const isPetugasPath = location.pathname.startsWith('/petugas');
   
   const [formData, setFormData] = useState({
     nama: '',
@@ -70,7 +73,7 @@ const EditWarga = () => {
         confirmButtonColor: '#064D36'
       });
 
-      navigate('/petugas/warga'); // Sesuaikan dengan route tujuan Anda
+      navigate(isPetugasPath ? '/petugas/warga' : '/admin/pengguna');
     } catch (error) {
       console.error("Error Detail:", error);
       Swal.fire('Gagal!', 'Terjadi kesalahan saat mengupdate data.', 'error');
@@ -81,7 +84,7 @@ const EditWarga = () => {
 
   return (
     <div style={styles.container}>
-      <AdminSidebar activeMenu="warga" />
+      {isPetugasPath ? <PetugasSidebar activeMenu="warga" /> : <AdminSidebar activeMenu="warga" />}
 
       <div style={styles.mainContent}>
         <div style={styles.whiteCanvas}>
