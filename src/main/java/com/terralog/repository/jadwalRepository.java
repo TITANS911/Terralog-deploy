@@ -14,4 +14,5 @@ public interface jadwalRepository extends JpaRepository<jadwalModel, Integer> {
     
     // Menyelaraskan pencarian berdasarkan properti userId di dalam kelas userModel
     List<jadwalModel> findByUserUserId(Long userId);
+    boolean existsByUserUserId(Long userId);
 }

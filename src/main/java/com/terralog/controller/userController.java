@@ -5,6 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.terralog.model.userModel;
+import com.terralog.repository.jadwalRepository;
+import com.terralog.repository.sampahRepository;
+import com.terralog.repository.transaksiRepository;
 import com.terralog.service.userService;
 
 @RestController
@@ -13,6 +16,15 @@ public class userController {
 
     @Autowired
     private userService userService;
+    
+    @Autowired
+    private sampahRepository sampahRepository;
+    
+    @Autowired
+    private transaksiRepository transaksiRepository;
+    
+    @Autowired
+    private jadwalRepository jadwalRepository;
 
     // --- GET ALL USERS ---
     @GetMapping
@@ -69,6 +81,18 @@ public class userController {
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable Long id) {
         try {
+            boolean punyaSampah = sampahRepository.existsByUserId(id);
+            boolean punyaTransaksiSebagaiWarga = transaksiRepository.existsByUserUserId(id);
+            boolean punyaTransaksiSebagaiPetugas = transaksiRepository.existsByPetugasUserId(id);
+            boolean punyaJadwal = jadwalRepository.existsByUserUserId(id);
+
+            if (punyaSampah || punyaTransaksiSebagaiWarga || punyaTransaksiSebagaiPetugas || punyaJadwal) {
+                String message =
+                        "User tidak bisa dihapus karena masih terhubung dengan data lain (transaksi/jadwal/sampah). " +
+                        "Hapus/ubah data terkait dulu, atau gunakan metode nonaktifkan akun.";
+                return ResponseEntity.status(409).body(message);
+            }
+
             userService.deleteUser(id);
             return ResponseEntity.ok("User dengan ID " + id + " berhasil dihapus");
         } catch (Exception e) {

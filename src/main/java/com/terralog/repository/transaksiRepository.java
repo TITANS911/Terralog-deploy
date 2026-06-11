@@ -8,5 +8,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface transaksiRepository extends JpaRepository<transaksiModel, Long> {
-    
+    boolean existsByUserUserId(Long userId);
+    boolean existsByPetugasUserId(Long userId);
 }

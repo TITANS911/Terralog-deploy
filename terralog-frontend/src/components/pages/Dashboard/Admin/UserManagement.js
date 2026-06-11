@@ -102,7 +102,12 @@ const UserManagement = () => {
           fetchUsers();
         } catch (error) {
           console.error('Gagal menghapus data warga:', error);
-          Swal.fire('Gagal', 'Data warga gagal dihapus.', 'error');
+          const message =
+            error.response?.data?.message ||
+            error.response?.data ||
+            error.message ||
+            'Data warga gagal dihapus.';
+          Swal.fire('Gagal', message, 'error');
         }
       }
     });

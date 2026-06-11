@@ -11,6 +11,7 @@ public interface sampahRepository extends JpaRepository<sampahModel, Long> {
     
     // Tetap bisa mencari berdasarkan userId
     List<sampahModel> findByUserId(Long userId);
+    boolean existsByUserId(Long userId);
 
     // --- TAMBAHAN UNTUK DASHBOARD ---
     
