@@ -8,10 +8,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Base64;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.nio.file.Path;
 
@@ -51,6 +55,43 @@ public class transaksiController {
             return ResponseEntity.ok(transaksiService.getTransaksiById(id));
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/{id}/foto-data")
+    public ResponseEntity<?> getTransaksiFotoData(@PathVariable Long id) {
+        try {
+            transaksiModel transaksi = transaksiService.getTransaksiById(id);
+            String foto = transaksi.getFoto();
+
+            if (foto == null || foto.trim().isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Foto transaksi tidak tersedia.");
+            }
+
+            String uploadDir = System.getProperty("user.dir") + "/uploads";
+            Path filePath = Paths.get(uploadDir).resolve(Paths.get(foto).getFileName().toString());
+
+            if (!Files.exists(filePath)) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("File foto tidak ditemukan di server.");
+            }
+
+            byte[] fileBytes = Files.readAllBytes(filePath);
+            String mimeType = Files.probeContentType(filePath);
+            if (mimeType == null || mimeType.isBlank()) {
+                mimeType = "application/octet-stream";
+            }
+
+            Map<String, String> response = new HashMap<>();
+            response.put("mimeType", mimeType);
+            response.put("data", Base64.getEncoder().encodeToString(fileBytes));
+            response.put("fileName", filePath.getFileName().toString());
+
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Gagal membaca file foto: " + e.getMessage());
         }
     }
 

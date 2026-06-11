@@ -74,4 +74,23 @@ export const fetchUploadBlobUrl = async (fotoPath) => {
     return URL.createObjectURL(blob);
 };
 
+export const fetchTransaksiFotoDataUrl = async (transaksiId) => {
+    if (!transaksiId) return '';
+
+    const response = await fetch(`${API_BASE_URL}/api/transaksi/${transaksiId}/foto-data`, {
+        mode: 'cors'
+    });
+
+    if (!response.ok) {
+        throw new Error(`Gagal memuat foto transaksi (${response.status})`);
+    }
+
+    const payload = await response.json();
+    if (!payload?.data || !payload?.mimeType) {
+        return '';
+    }
+
+    return `data:${payload.mimeType};base64,${payload.data}`;
+};
+
 export default API_BASE_URL;

@@ -6,7 +6,7 @@ import { Search, Upload, ArrowLeft } from 'lucide-react';
 import PetugasSidebar from '../../PetugasSidebar'; 
 import AdminSidebar from '../../AdminSidebar';
 
-import API_BASE_URL, { fetchUploadBlobUrl } from '../../../../../config/api';
+import API_BASE_URL, { fetchTransaksiFotoDataUrl } from '../../../../../config/api';
 
 const EditTransaksi = () => {
   const navigate = useNavigate();
@@ -73,14 +73,14 @@ const EditTransaksi = () => {
     let isActive = true;
 
     const loadExistingImage = async () => {
-      if (!formData.foto || formData.foto instanceof File) return;
+      if (!formData.foto || formData.foto instanceof File || !id) return;
 
       try {
-        blobUrl = await fetchUploadBlobUrl(formData.foto);
+        blobUrl = await fetchTransaksiFotoDataUrl(id);
         if (isActive) {
           setImagePreview(blobUrl);
         } else if (blobUrl) {
-          URL.revokeObjectURL(blobUrl);
+          // no-op for data URL
         }
       } catch (error) {
         console.error('Gagal memuat preview foto transaksi:', error);
@@ -92,9 +92,8 @@ const EditTransaksi = () => {
 
     return () => {
       isActive = false;
-      if (blobUrl) URL.revokeObjectURL(blobUrl);
     };
-  }, [formData.foto]);
+  }, [formData.foto, id]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

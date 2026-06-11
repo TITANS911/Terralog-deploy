@@ -4,7 +4,7 @@ import axios from 'axios';
 import { ArrowLeft } from 'lucide-react';
 import AdminSidebar from '../AdminSidebar';
 
-import API_BASE_URL, { fetchUploadBlobUrl } from '../../../../config/api';
+import API_BASE_URL, { fetchTransaksiFotoDataUrl } from '../../../../config/api';
 
 const DetailTransaksi = () => {
   const { id } = useParams();
@@ -45,11 +45,11 @@ const DetailTransaksi = () => {
       }
 
       try {
-        blobUrl = await fetchUploadBlobUrl(data.foto);
+        blobUrl = await fetchTransaksiFotoDataUrl(id);
         if (isActive) {
           setImageSrc(blobUrl);
         } else if (blobUrl) {
-          URL.revokeObjectURL(blobUrl);
+          // no-op for data URL
         }
       } catch (error) {
         console.error('Gagal memuat foto transaksi:', error);
@@ -61,9 +61,8 @@ const DetailTransaksi = () => {
 
     return () => {
       isActive = false;
-      if (blobUrl) URL.revokeObjectURL(blobUrl);
     };
-  }, [data?.foto]);
+  }, [data?.foto, id]);
 
   if (loading) return <div>Memuat...</div>;
   if (!data) return <div>{errorMessage || 'Data tidak ditemukan!'}</div>;
