@@ -31,6 +31,9 @@ import API_BASE_URL from '../../../../config/api';
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Filler);
 ChartJS.register(ArcElement, Tooltip, Legend);
 
+const normalizeCategoryName = (value) => (value || '').toString().trim().toLowerCase();
+const getTransactionCategoryName = (item) => item?.kategoriSampah || item?.kategori?.namaKategori || 'Lainnya';
+
 
 const LaporanPetugas = () => {
   const navigate = useNavigate();
@@ -51,7 +54,7 @@ const LaporanPetugas = () => {
       const [chartData, setChartData] = useState([]); // Ganti monthlyTrend statis
       const [periode, setPeriode] = useState('Mei 2026');
       const [periodeBanding, setPeriodeBanding] = useState('April 2026');
-      const [jenisSampah, setJenisSampah] = useState('Anorganik');
+      const [jenisSampah, setJenisSampah] = useState('Semua');
 
 
   const handleLogout = () => {
@@ -89,12 +92,13 @@ const currentPetugasId = parseInt(localStorage.getItem('userId'), 10);
 useEffect(() => {
   const processChartData = () => {
     const safeAllWaste = Array.isArray(allWaste) ? allWaste : [];
-    if (safeAllWaste.length === 0) return;
 
     // 1. FILTER KATEGORI: (Jika user memilih kategori tertentu)
-    const filtered = jenisSampah === 'Semua' 
-      ? safeAllWaste 
-      : safeAllWaste.filter(t => t.kategoriSampah === jenisSampah);
+    const filtered = jenisSampah === 'Semua'
+      ? safeAllWaste
+      : safeAllWaste.filter(
+          (t) => normalizeCategoryName(getTransactionCategoryName(t)) === normalizeCategoryName(jenisSampah)
+        );
 
     // 2. AGGREGASI: Jumlahkan berat berdasarkan bulan
     const monthlyMap = { 
@@ -321,7 +325,7 @@ const donutChartData = useMemo(() => ({
               value={jenisSampah}
               onChange={(e) => setJenisSampah(e.target.value)}
               // Ganti item.nama menjadi item.namaKategori
-              options={['Pilih Jenis', ...(Array.isArray(kategoriList) ? kategoriList.map(item => item.namaKategori) : [])]}
+              options={['Semua', ...(Array.isArray(kategoriList) ? kategoriList.map(item => item.namaKategori) : [])]}
             />
           </section>
         

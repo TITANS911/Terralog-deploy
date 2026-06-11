@@ -25,6 +25,9 @@ import API_BASE_URL from '../../../../config/api';
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Filler);
 ChartJS.register(ArcElement, Tooltip, Legend);
 
+const normalizeCategoryName = (value) => (value || '').toString().trim().toLowerCase();
+const getWasteCategoryName = (item) => item?.kategori?.namaKategori || item?.kategoriSampah || 'Lainnya';
+
 
 const LaporanWarga = () => {
   const navigate = useNavigate();
@@ -68,12 +71,13 @@ const LaporanWarga = () => {
   useEffect(() => {
     const processChartData = () => {
       const safeFilteredData = Array.isArray(filteredWasteData) ? filteredWasteData : [];
-      if (safeFilteredData.length === 0) return;
 
       // 1. FILTER KATEGORI: (Jika user memilih kategori tertentu)
-      const filtered = jenisSampah === 'Semua' 
-        ? safeFilteredData 
-        : safeFilteredData.filter(t => t.kategori?.namaKategori === jenisSampah);
+      const filtered = jenisSampah === 'Semua'
+        ? safeFilteredData
+        : safeFilteredData.filter(
+            (t) => normalizeCategoryName(getWasteCategoryName(t)) === normalizeCategoryName(jenisSampah)
+          );
 
       // 2. AGGREGASI: Jumlahkan berat berdasarkan bulan
       const monthlyMap = { 
