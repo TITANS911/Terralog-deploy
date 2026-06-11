@@ -21,11 +21,15 @@ export const getUploadUrl = (fotoPath) => {
         return cleanedPath;
     }
 
-    const normalizedPath = cleanedPath.startsWith('/uploads/')
-        ? cleanedPath
-        : cleanedPath.startsWith('uploads/')
-            ? `/${cleanedPath}`
-            : `/uploads/${cleanedPath}`;
+    const slashNormalizedPath = cleanedPath.replace(/\\/g, '/');
+    const uploadsIndex = slashNormalizedPath.toLowerCase().lastIndexOf('/uploads/');
+    const relativeUploadPath = uploadsIndex >= 0
+        ? slashNormalizedPath.slice(uploadsIndex)
+        : slashNormalizedPath.startsWith('uploads/')
+            ? `/${slashNormalizedPath}`
+            : slashNormalizedPath.startsWith('/uploads/')
+                ? slashNormalizedPath
+                : `/uploads/${slashNormalizedPath.split('/').pop()}`;
 
     if (typeof window !== 'undefined') {
         const isLocalhost =
@@ -33,11 +37,11 @@ export const getUploadUrl = (fotoPath) => {
             window.location.hostname === '127.0.0.1';
 
         if (!isLocalhost) {
-            return normalizedPath;
+            return relativeUploadPath;
         }
     }
 
-    return `${API_BASE_URL}${normalizedPath}`;
+    return `${API_BASE_URL}${relativeUploadPath}`;
 };
 
 export default API_BASE_URL;

@@ -4,13 +4,14 @@ import axios from 'axios';
 import { ArrowLeft } from 'lucide-react';
 import AdminSidebar from '../AdminSidebar';
 
-import { getUploadUrl } from '../../../../config/api';
+import API_BASE_URL, { getUploadUrl } from '../../../../config/api';
 
 const DetailTransaksi = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     const fetchDetail = async () => {
@@ -20,6 +21,11 @@ const DetailTransaksi = () => {
         setData(response.data);
       } catch (error) {
         console.error("Gagal ambil detail:", error);
+        setErrorMessage(
+          error.response?.data?.message ||
+          error.response?.data ||
+          'Data transaksi tidak ditemukan!'
+        );
       } finally {
         setLoading(false);
       }
@@ -28,7 +34,7 @@ const DetailTransaksi = () => {
   }, [id]);
 
   if (loading) return <div>Memuat...</div>;
-  if (!data) return <div>Data tidak ditemukan!</div>;
+  if (!data) return <div>{errorMessage || 'Data tidak ditemukan!'}</div>;
 
   return (
     <div style={styles.container}>
