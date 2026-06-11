@@ -26,19 +26,20 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            // 1. Integrasikan CORS filter yang kita buat di bawah ke dalam security chain
-            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-            
-            // 2. Matikan CSRF agar request POST dari React tidak di-block dan menghasilkan 405
-            .csrf(csrf -> csrf.disable()) 
-            
-            // 3. Atur Hak Akses URL Endpoint
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**").permitAll()  // Buka akses login & register
-                .requestMatchers("/api/jadwal/**").permitAll() // Buka akses jadwal
-                .anyRequest().permitAll()                      // Izinkan rute lainnya sementara
-            );
-            
+                // 1. Integrasikan CORS filter yang kita buat di bawah ke dalam security chain
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+
+                // 2. Matikan CSRF agar request POST dari React tidak di-block dan menghasilkan
+                // 405
+                .csrf(csrf -> csrf.disable())
+
+                // 3. Atur Hak Akses URL Endpoint
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/auth/**").permitAll() // Buka akses login & register
+                        .requestMatchers("/api/jadwal/**").permitAll() // Buka akses jadwal
+                        .anyRequest().permitAll() // Izinkan rute lainnya sementara
+                );
+
         return http.build();
     }
 
@@ -50,7 +51,7 @@ public class SecurityConfig {
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(false);
-        
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration); // Terapkan ke semua endpoint
         return source;
@@ -63,10 +64,8 @@ public class SecurityConfig {
             protected void doFilterInternal(
                     HttpServletRequest request,
                     HttpServletResponse response,
-                    FilterChain filterChain
-            ) throws ServletException, IOException {
-                String pna = request.getHeader("Access-Control-Request-Private-Network");
-                if ("true".equalsIgnoreCase(pna)) {
+                    FilterChain filterChain) throws ServletException, IOException {
+                if (request.getHeader("Origin") != null) {
                     response.setHeader("Access-Control-Allow-Private-Network", "true");
                 }
                 filterChain.doFilter(request, response);
