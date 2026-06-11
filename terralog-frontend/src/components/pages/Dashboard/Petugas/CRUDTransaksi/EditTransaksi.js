@@ -6,7 +6,7 @@ import { Search, Upload, ArrowLeft } from 'lucide-react';
 import PetugasSidebar from '../../PetugasSidebar'; 
 import AdminSidebar from '../../AdminSidebar';
 
-import API_BASE_URL from '../../../../../config/api';
+import API_BASE_URL, { getUploadUrl } from '../../../../../config/api';
 
 const EditTransaksi = () => {
   const navigate = useNavigate();
@@ -57,7 +57,7 @@ const EditTransaksi = () => {
           });
 
           if (data.foto) {
-            setImagePreview(`${API_BASE_URL}/uploads/${data.foto}`);
+            setImagePreview(getUploadUrl(data.foto));
           }
         }
       } catch (err) {

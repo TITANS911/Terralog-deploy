@@ -44,7 +44,7 @@ const EditPetugas = () => {
         } catch (err) {
             console.error("Gagal load data:", err);
             Swal.fire('Error', 'Data petugas tidak ditemukan!', 'error');
-            navigate('/admin/pengguna');
+            navigate('/admin/petugas');
         }
     };
     if (id && id !== "undefined") {
@@ -63,7 +63,7 @@ const EditPetugas = () => {
 
             await axios.put(`${API_BASE_URL}/api/users/${id}`, payload);
             Swal.fire('Berhasil!', 'Data petugas telah diperbarui', 'success');
-            navigate('/admin/pengguna');
+            navigate('/admin/petugas');
         } catch (error) {
             console.error("Gagal Update:", error.response?.data);
             Swal.fire('Gagal!', 'Cek kembali koneksi atau format data', 'error');

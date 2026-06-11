@@ -4,7 +4,7 @@ import axios from 'axios';
 import { ArrowLeft } from 'lucide-react';
 import AdminSidebar from '../AdminSidebar';
 
-import API_BASE_URL from '../../../../config/api';
+import { getUploadUrl } from '../../../../config/api';
 
 const DetailTransaksi = () => {
   const { id } = useParams();
@@ -47,7 +47,7 @@ const DetailTransaksi = () => {
           {/* Foto dari folder uploads */}
           <div style={styles.imageContainer}>
             <img 
-              src={`${API_BASE_URL}/uploads/${data.foto}`} 
+              src={getUploadUrl(data.foto)}
               alt="Foto Sampah" 
               style={styles.image}
               onError={(e) => e.target.src = '/placeholder.jpg'}

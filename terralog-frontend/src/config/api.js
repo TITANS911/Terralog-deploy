@@ -11,4 +11,33 @@ if (!API_BASE_URL.startsWith('http://') && !API_BASE_URL.startsWith('https://'))
     }
 }
 
+export const getUploadUrl = (fotoPath) => {
+    if (!fotoPath) return '';
+
+    const cleanedPath = fotoPath.toString().trim();
+    if (!cleanedPath) return '';
+
+    if (cleanedPath.startsWith('http://') || cleanedPath.startsWith('https://')) {
+        return cleanedPath;
+    }
+
+    const normalizedPath = cleanedPath.startsWith('/uploads/')
+        ? cleanedPath
+        : cleanedPath.startsWith('uploads/')
+            ? `/${cleanedPath}`
+            : `/uploads/${cleanedPath}`;
+
+    if (typeof window !== 'undefined') {
+        const isLocalhost =
+            window.location.hostname === 'localhost' ||
+            window.location.hostname === '127.0.0.1';
+
+        if (!isLocalhost) {
+            return normalizedPath;
+        }
+    }
+
+    return `${API_BASE_URL}${normalizedPath}`;
+};
+
 export default API_BASE_URL;

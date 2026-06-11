@@ -85,7 +85,7 @@ const AddPetugas = () => {
                 await axios.post(`${API_BASE_URL}/api/users`, payload);
                 Swal.fire('Berhasil!', 'Petugas baru ditambahkan', 'success');
             }
-            navigate('/admin/pengguna');
+            navigate('/admin/petugas');
         } catch (error) {
             console.error("Error detail:", error.response?.data);
             Swal.fire('Gagal!', 'Terjadi kesalahan sistem atau format data salah', 'error');
